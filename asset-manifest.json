@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/pullup-programming/static/css/main.073c9b0a.css",
-    "main.js": "/pullup-programming/static/js/main.29fa3a7a.js",
+    "main.css": "/pullup-programming/static/css/main.ff79ec8e.css",
+    "main.js": "/pullup-programming/static/js/main.61df622e.js",
     "index.html": "/pullup-programming/index.html",
-    "main.073c9b0a.css.map": "/pullup-programming/static/css/main.073c9b0a.css.map",
-    "main.29fa3a7a.js.map": "/pullup-programming/static/js/main.29fa3a7a.js.map"
+    "main.ff79ec8e.css.map": "/pullup-programming/static/css/main.ff79ec8e.css.map",
+    "main.61df622e.js.map": "/pullup-programming/static/js/main.61df622e.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.29fa3a7a.js"
+    "static/css/main.ff79ec8e.css",
+    "static/js/main.61df622e.js"
   ]
 }
