@@ -4,7 +4,6 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Stack from 'react-bootstrap/Stack';
 
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
