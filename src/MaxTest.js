@@ -21,6 +21,17 @@ function MaxTest() {
 		localStorage.setItem('maxReps', count);
 		localStorage.setItem('maxRepsDate', newDate);
 
+		let workouts = JSON.parse(localStorage.getItem("workoutHistory") || "[]");
+
+		workouts.push({
+			date: newDate,
+			type: 'max',
+			day: -1,
+			currentMax: count
+		});
+
+		localStorage.setItem("workoutHistory", JSON.stringify(workouts));
+
 		// To fire render
 		setForceRender(forceRender + 1);
 	};
