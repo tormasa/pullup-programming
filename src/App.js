@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 	return (
-		<Tabs defaultActiveKey="test" justify>
+		<Tabs defaultActiveKey={(!localStorage.getItem('maxReps')) ? "test" : "workout"} justify>
 			<Tab eventKey="test" title="Test">
 				<MaxTest />
 			</Tab>
