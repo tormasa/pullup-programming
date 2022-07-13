@@ -7,16 +7,23 @@ import Stack from 'react-bootstrap/Stack';
 import './MaxTest.css';
 
 function MaxTest() {
-	const [cookies, setCookie] = useCookies(['maxReps']);
+	const [cookies, setCookie] = useCookies(['maxReps', 'maxRepsDate']);
 	const [count, setCount] = useState(() => {
 		if (!cookies.maxReps) return 0;
 		else return Number(cookies.maxReps);
 	});
+	const [date, setDate] = useState(() => {
+		if (!cookies.maxRepsDate) return 0;
+		else return Number(cookies.maxRepsDate);
+	});
 
 	const handleConfirm = () => {
-		console.log(Date.now);
+		console.log(Date.now());
+		let newDate = Date.now();
+		setDate(newDate);
 
 		setCookie('maxReps', count, { path: '/' });
+		setCookie('maxRepsDate', newDate, { path: '/' });
 	};
 
 	const handleDecrease = () => {
@@ -31,10 +38,24 @@ function MaxTest() {
 		setCount(0);
 	};
 
+	const getDateString = () => {
+		if (date < 1) return '';
+		else {
+			let newDate = new Date(date);
+			
+			return 'Set on '
+				+newDate.getDate() + '-'
+				+newDate.getMonth() + '-'
+				+newDate.getFullYear() + ' '
+				+newDate.getHours() + ':'
+				+newDate.getMinutes();
+		}
+	};
+
 	return (
 		<Stack gap={2} className='max-reps-container'>
 			<p className='max-reps-paragraph'>Your current maximum reps is {cookies.maxReps}.</p>
-			<p className='max-reps-paragraph'>Set on xx/xx/xxxx xx:xx</p>
+			<p className='max-reps-paragraph'>{getDateString()}</p>
 
 			<Stack direction='horizontal' gap={3} className='max-reps-stack'>
 				<Button variant="danger" onClick={handleDecrease} size='lg'>-</Button>{' '}
