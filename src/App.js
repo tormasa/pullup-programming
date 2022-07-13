@@ -1,4 +1,5 @@
 import MaxTest from './MaxTest';
+import Workout from './Workout';
 
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -12,7 +13,7 @@ function App() {
 				<MaxTest />
 			</Tab>
 			<Tab eventKey="workout" title="Workout">
-
+				<Workout />
 			</Tab>
 		</Tabs>
 	);
