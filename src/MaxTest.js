@@ -10,7 +10,7 @@ function MaxTest() {
 	const [cookies, setCookie] = useCookies(['maxReps']);
 	const [count, setCount] = useState(() => {
 		if (!cookies.maxReps) return 0;
-		else return cookies.maxReps;
+		else return Number(cookies.maxReps);
 	});
 
 	const handleConfirm = () => {
@@ -27,6 +27,9 @@ function MaxTest() {
 
 	return (
 		<Stack gap={2} className='max-reps-container'>
+			<p className='max-reps-paragraph'>Your current maximum reps is {cookies.maxReps}.</p>
+			<p className='max-reps-paragraph'>Set on xx/xx/xxxx xx:xx</p>
+
 			<Stack direction='horizontal' gap={3} className='max-reps-stack'>
 				<Button variant="danger" onClick={handleDecrease} size='lg'>-</Button>{' '}
 				<div className='max-reps'>{count}</div>
