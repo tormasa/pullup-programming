@@ -14,6 +14,8 @@ function MaxTest() {
 	});
 
 	const handleConfirm = () => {
+		console.log(Date.now);
+
 		setCookie('maxReps', count, { path: '/' });
 	};
 
@@ -23,6 +25,10 @@ function MaxTest() {
 
 	const handleIncrease = () => {
 		setCount(count + 1);
+	};
+
+	const handleReset = () => {
+		setCount(0);
 	};
 
 	return (
@@ -35,6 +41,8 @@ function MaxTest() {
 				<div className='max-reps'>{count}</div>
 				<Button variant="success" onClick={handleIncrease} size='lg'>+</Button>{' '}
 			</Stack>
+
+			<Button variant="warning" onClick={handleReset}>Reset</Button>{' '}
 
 			<Button variant="primary" onClick={handleConfirm}>Confirm</Button>{' '}
 		</Stack>
