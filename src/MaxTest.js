@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useCookies } from 'react-cookie';
 
 import Button from 'react-bootstrap/Button';
 import Stack from 'react-bootstrap/Stack';
@@ -6,10 +7,14 @@ import Stack from 'react-bootstrap/Stack';
 import './MaxTest.css';
 
 function MaxTest() {
-	const [count, setCount] = useState(0);
+	const [cookies, setCookie] = useCookies(['maxReps']);
+	const [count, setCount] = useState(() => {
+		if (!cookies.maxReps) return 0;
+		else return cookies.maxReps;
+	});
 
-	const handleTestClick = () => {
-		setCount(count + 1);
+	const handleConfirm = () => {
+		setCookie('maxReps', count, { path: '/' });
 	};
 
 	const handleDecrease = () => {
@@ -28,7 +33,7 @@ function MaxTest() {
 				<Button variant="success" onClick={handleIncrease} size='lg'>+</Button>{' '}
 			</Stack>
 
-			<Button variant="primary" onClick={handleTestClick}>Confirm</Button>{' '}
+			<Button variant="primary" onClick={handleConfirm}>Confirm</Button>{' '}
 		</Stack>
 	);
 }
