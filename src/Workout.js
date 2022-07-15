@@ -4,16 +4,29 @@ import Stack from 'react-bootstrap/Stack';
 import Program from './program';
 
 function Workout() {
+	const [currentProgram, setCurrenProgram] = useState(null);
 	const [currentDay, setCurrentDay] = useState(0);
 	const [currentSet, setCurrentSet] = useState(0);
 
 	useEffect(() => {
+		// Has the program changed?
+		let maxReps = localStorage.getItem('maxReps');
+		if (!currentProgram || currentProgram.minReps > maxReps || currentProgram.maxReps < maxReps) getNewProgram();
+
+		console.log('currentProgram', currentProgram);
+	});
+
+	const getNewProgram = () => {
 		let maxReps = localStorage.getItem('maxReps');
 
 		for (let i = 0; i < Program.programs.length; i++) {
 			const program = Program.programs[i];
 			
 			if (maxReps <= program.maxReps && maxReps >= program.minReps) {
+				setCurrenProgram(program);
+
+				console.log('program', program);
+
 				let workouts = JSON.parse(localStorage.getItem("workoutHistory") || "[]");
 				let nextWorkoutDay = 0;
 
@@ -21,13 +34,11 @@ function Workout() {
 
 				}
 
-				console.log(program.days[0]);
-
-				setCurrentDay(program.days[0]);
+				setCurrentDay(0);
 				setCurrentSet(0);
 			}
 		}
-	}, []);
+	};
 
 	const handleDecrease = () => {
 
@@ -45,11 +56,11 @@ function Workout() {
 		<div>
 			<p>{(!localStorage.getItem('maxReps') ? 'Set your max reps first!' : '')}</p>
 
-			{(currentDay === 0) ? <div></div> :
+			{(currentProgram === null) ? <div></div> :
 			<div>
 				<Stack direction='horizontal' gap={3} className='max-reps-stack'>
 					<Button variant="danger" onClick={handleDecrease} size='lg'>-</Button>{' '}
-					<div className='max-reps'>{currentDay.sets[currentSet]}</div>
+					<div className='max-reps'>{currentProgram.days[currentDay].sets[currentSet]}</div>
 					<Button variant="success" onClick={handleIncrease} size='lg'>+</Button>{' '}
 				</Stack>
 				
