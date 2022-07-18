@@ -58,6 +58,8 @@ function Workout() {
 
 			{(currentProgram === null) ? <div></div> :
 			<div>
+				<h3>{currentProgram.minReps}-{currentProgram.maxReps} reps, day {currentDay + 1}</h3>
+				<h3>{currentSet + 1}. set</h3>
 				<Stack direction='horizontal' gap={3} className='max-reps-stack'>
 					<Button variant="danger" onClick={handleDecrease} size='lg'>-</Button>{' '}
 					<div className='max-reps'>{currentProgram.days[currentDay].sets[currentSet]}</div>
