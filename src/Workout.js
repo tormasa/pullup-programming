@@ -8,6 +8,7 @@ function Workout() {
 	const [currentDay, setCurrentDay] = useState(0);
 	const [currentSet, setCurrentSet] = useState(0);
 	const [currentWorkout, setCurrentWorkout] = useState(null);
+	const [nextWorkoutDate, setNextWorkoutDate] = useState(0);
 
 	useEffect(() => {
 		// Has the program changed?
@@ -31,13 +32,18 @@ function Workout() {
 				let workouts = JSON.parse(localStorage.getItem("workoutHistory") || "[]");
 				let nextWorkoutDay = 0;
 				let nextSet = 0;
+				let nextDate = Date.now;
 
 				if (workouts[workouts.length - 1].type === 'workout') {
 
 				}
+				else {
+					nextDate = addDays(workouts[workouts.length - 1].date, 1);
+				}
 
 				setCurrentDay(nextWorkoutDay);
 				setCurrentSet(nextSet);
+				setNextWorkoutDate(nextDate);
 
 				console.log(program.days[nextWorkoutDay].sets[nextSet]);
 
@@ -68,9 +74,31 @@ function Workout() {
 		setCurrentSet(currentSet + 1);
 	};
 
+	const sameDayOrLater = (d1, d2) => {
+		d1 = new Date(d1);
+		d2 = new Date(d2);
+
+		return (d1.getFullYear() === d2.getFullYear() &&
+		  	d1.getMonth() === d2.getMonth() &&
+		  	d1.getDate() === d2.getDate())
+			||
+			(d1 > d2);
+	};
+
+	const addDays = (date, days) => {
+		return date + days * 24 * 60 * 60 * 1000;
+	};
+
+	const getDateAndMonth = (date) => {
+		let newDate = new Date(date);
+		return newDate.getDate() + '/' + (newDate.getMonth() + 1);
+	};
+
 	return(
 		<div>
 			<p>{(!localStorage.getItem('maxReps') ? 'Set your max reps first!' : '')}</p>
+
+			{(sameDayOrLater(Date.now, nextWorkoutDate)) ? '' : <h3>Next workout on {getDateAndMonth(nextWorkoutDate)}</h3>}
 
 			{(currentProgram === null || currentWorkout === null) ? <div></div> :
 			<div>
