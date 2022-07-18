@@ -65,7 +65,7 @@ function Workout() {
 	};
 
 	const handleConfirm = () => {
-
+		setCurrentSet(currentSet + 1);
 	};
 
 	return(
@@ -75,10 +75,18 @@ function Workout() {
 			{(currentProgram === null || currentWorkout === null) ? <div></div> :
 			<div>
 				<h3>{currentProgram.minReps}-{currentProgram.maxReps} reps, day {currentDay + 1}</h3>
-				<h3>{currentSet + 1}. set</h3>
+				{(currentSet < 4) ? 
+					<h3>{currentSet + 1}. set</h3>
+					:
+					<h3>Max set, min reps {currentProgram.days[currentDay].max}</h3>
+				}
 				<Stack direction='horizontal' gap={3} className='max-reps-stack'>
 					<Button variant="danger" onClick={handleDecrease} size='lg'>-</Button>{' '}
-					<div className='max-reps'>{currentWorkout.sets[currentSet]}</div>
+					{(currentSet < 4) ?
+						<div className='max-reps'>{currentWorkout.sets[currentSet]}</div>
+						:
+						<div className='max-reps'>{currentWorkout.max}</div>
+					}
 					<Button variant="success" onClick={handleIncrease} size='lg'>+</Button>{' '}
 				</Stack>
 				
