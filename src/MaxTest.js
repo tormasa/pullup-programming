@@ -64,7 +64,7 @@ function MaxTest() {
 			
 			return 'Set on '
 				+String(newDate.getDate()).padStart(2, '0') + '-'
-				+String(newDate.getMonth()).padStart(2, '0') + '-'
+				+String(newDate.getMonth() + 1).padStart(2, '0') + '-'
 				+newDate.getFullYear() + ' '
 				+String(newDate.getHours()).padStart(2, '0') + ':'
 				+String(newDate.getMinutes()).padStart(2, '0');
