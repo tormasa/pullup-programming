@@ -7,6 +7,7 @@ function Workout() {
 	const [currentProgram, setCurrenProgram] = useState(null);
 	const [currentDay, setCurrentDay] = useState(0);
 	const [currentSet, setCurrentSet] = useState(0);
+	const [currentWorkout, setCurrentWorkout] = useState(null);
 
 	useEffect(() => {
 		// Has the program changed?
@@ -29,23 +30,38 @@ function Workout() {
 
 				let workouts = JSON.parse(localStorage.getItem("workoutHistory") || "[]");
 				let nextWorkoutDay = 0;
+				let nextSet = 0;
 
 				if (workouts[workouts.length - 1].type === 'workout') {
 
 				}
 
-				setCurrentDay(0);
-				setCurrentSet(0);
+				setCurrentDay(nextWorkoutDay);
+				setCurrentSet(nextSet);
+
+				console.log(program.days[nextWorkoutDay].sets[nextSet]);
+
+				// New workout
+				let newWorkout = {
+					date: Date.now(),
+					type: 'workout',
+					day: nextWorkoutDay,
+					currentMax: maxReps,
+					sets: program.days[nextWorkoutDay].sets,
+					max: program.days[nextWorkoutDay].max
+				};
+
+				setCurrentWorkout(newWorkout);
 			}
 		}
 	};
 
 	const handleDecrease = () => {
-
+		currentWorkout.sets[currentSet]--;
 	};
 
 	const handleIncrease = () => {
-
+		currentWorkout.sets[currentSet]++;
 	};
 
 	const handleConfirm = () => {
@@ -56,13 +72,13 @@ function Workout() {
 		<div>
 			<p>{(!localStorage.getItem('maxReps') ? 'Set your max reps first!' : '')}</p>
 
-			{(currentProgram === null) ? <div></div> :
+			{(currentProgram === null || currentWorkout === null) ? <div></div> :
 			<div>
 				<h3>{currentProgram.minReps}-{currentProgram.maxReps} reps, day {currentDay + 1}</h3>
 				<h3>{currentSet + 1}. set</h3>
 				<Stack direction='horizontal' gap={3} className='max-reps-stack'>
 					<Button variant="danger" onClick={handleDecrease} size='lg'>-</Button>{' '}
-					<div className='max-reps'>{currentProgram.days[currentDay].sets[currentSet]}</div>
+					<div className='max-reps'>{currentWorkout.sets[currentSet]}</div>
 					<Button variant="success" onClick={handleIncrease} size='lg'>+</Button>{' '}
 				</Stack>
 				
