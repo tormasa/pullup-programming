@@ -38,7 +38,7 @@ function Workout() {
 
 				}
 				else {
-					nextDate = addDays(workouts[workouts.length - 1].date, 1);
+					nextDate = addDays(workouts[workouts.length - 1].date, 2);
 				}
 
 				setCurrentDay(nextWorkoutDay);
@@ -74,9 +74,9 @@ function Workout() {
 		setCurrentSet(currentSet + 1);
 	};
 
-	const sameDayOrLater = (d1, d2) => {
-		d1 = new Date(d1);
-		d2 = new Date(d2);
+	const sameDayOrLater = (date1, date2) => {
+		let d1 = new Date(date1);
+		let d2 = new Date(date2);
 
 		return (d1.getFullYear() === d2.getFullYear() &&
 		  	d1.getMonth() === d2.getMonth() &&
@@ -86,7 +86,9 @@ function Workout() {
 	};
 
 	const addDays = (date, days) => {
-		return date + days * 24 * 60 * 60 * 1000;
+		var result = new Date(date);
+  		result.setDate(result.getDate() + days);
+		return result.getTime();
 	};
 
 	const getDateAndMonth = (date) => {
@@ -98,7 +100,7 @@ function Workout() {
 		<div>
 			<p>{(!localStorage.getItem('maxReps') ? 'Set your max reps first!' : '')}</p>
 
-			{(sameDayOrLater(Date.now, nextWorkoutDate)) ? '' : <h3>Next workout on {getDateAndMonth(nextWorkoutDate)}</h3>}
+			{(sameDayOrLater(Date.now(), nextWorkoutDate)) ? <h3>You have rested!</h3> : <h3>Next workout on {getDateAndMonth(nextWorkoutDate)}</h3>}
 
 			{(currentProgram === null || currentWorkout === null) ? <div></div> :
 			<div>
