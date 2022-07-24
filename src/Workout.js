@@ -14,8 +14,6 @@ function Workout() {
 		// Has the program changed?
 		let maxReps = localStorage.getItem('maxReps');
 		if (!currentProgram || currentProgram.minReps > maxReps || currentProgram.maxReps < maxReps) getNewProgram();
-
-		console.log('currentProgram', currentProgram);
 	});
 
 	const getNewProgram = () => {
@@ -33,13 +31,17 @@ function Workout() {
 				let nextWorkoutDay = 0;
 				let nextSet = 0;
 				let nextDate = Date.now;
+				let restDays = 2;
 
 				if (workouts[workouts.length - 1].type === 'workout') {
+					let lastWorkout = workouts[workouts.length - 1];
+					
+					nextWorkoutDay = lastWorkout.day + 1;
 
+					if (lastWorkout.day === 2 || lastWorkout.day === 5) restDays += 1;
 				}
-				else {
-					nextDate = addDays(workouts[workouts.length - 1].date, 2);
-				}
+				
+				nextDate = addDays(workouts[workouts.length - 1].date, restDays);
 
 				setCurrentDay(nextWorkoutDay);
 				setCurrentSet(nextSet);
@@ -63,14 +65,30 @@ function Workout() {
 	};
 
 	const handleDecrease = () => {
-		currentWorkout.sets[currentSet]--;
+		if (currentSet < 4) currentWorkout.sets[currentSet]--;
+		else currentWorkout.max--;
 	};
 
 	const handleIncrease = () => {
-		currentWorkout.sets[currentSet]++;
+		if (currentSet < 4) currentWorkout.sets[currentSet]++;
+		else currentWorkout.max++;
 	};
 
 	const handleConfirm = () => {
+		// Max set done
+		if (currentSet > 3) {
+			// Save current workout to local storage
+			let workouts = JSON.parse(localStorage.getItem("workoutHistory") || "[]");
+
+			workouts.push(currentWorkout);
+
+			localStorage.setItem("workoutHistory", JSON.stringify(workouts));
+
+			getNewProgram();
+
+			return;
+		}
+		
 		setCurrentSet(currentSet + 1);
 	};
 
