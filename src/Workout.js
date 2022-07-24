@@ -4,7 +4,7 @@ import Stack from 'react-bootstrap/Stack';
 import Program from './program';
 
 function Workout() {
-	const [currentProgram, setCurrenProgram] = useState(null);
+	const [currentProgram, setCurrentProgram] = useState(null);
 	const [currentDay, setCurrentDay] = useState(0);
 	const [currentSet, setCurrentSet] = useState(0);
 	const [currentWorkout, setCurrentWorkout] = useState(null);
@@ -23,7 +23,7 @@ function Workout() {
 			const program = Program.programs[i];
 			
 			if (maxReps <= program.maxReps && maxReps >= program.minReps) {
-				setCurrenProgram(program);
+				setCurrentProgram(program);
 
 				let workouts = JSON.parse(localStorage.getItem("workoutHistory") || "[]");
 				let nextWorkoutDay = 0;
@@ -33,10 +33,17 @@ function Workout() {
 
 				if (workouts[workouts.length - 1].type === 'workout') {
 					let lastWorkout = workouts[workouts.length - 1];
-					
-					nextWorkoutDay = lastWorkout.day + 1;
 
-					if (lastWorkout.day === 2 || lastWorkout.day === 5) restDays += 1;
+					if (lastWorkoutSuccess(lastWorkout, program.days[lastWorkout.day])) {
+						nextWorkoutDay = lastWorkout.day + 1;
+
+						if (lastWorkout.day === 2 || lastWorkout.day === 5) restDays += 1;
+					}
+					// Last workout failed, so we try it again
+					else {
+						nextWorkoutDay = lastWorkout.day;
+						restDays += 1;
+					}
 				}
 				
 				nextDate = addDays(workouts[workouts.length - 1].date, restDays);
@@ -51,13 +58,26 @@ function Workout() {
 					type: (nextWorkoutDay < 6) ? 'workout' : 'max',
 					day: nextWorkoutDay,
 					currentMax: maxReps,
-					sets: (nextWorkoutDay < 6) ? program.days[nextWorkoutDay].sets : [],
+					sets: (nextWorkoutDay < 6) ? [...program.days[nextWorkoutDay].sets] : [],
 					max: (nextWorkoutDay < 6) ? program.days[nextWorkoutDay].max : []
 				};
 
 				setCurrentWorkout(newWorkout);
 			}
 		}
+	};
+
+	const lastWorkoutSuccess = (lastWorkoutByUser, lastWorkoutFromProgram) => {
+		console.log('user', lastWorkoutByUser);
+		console.log('program', lastWorkoutFromProgram)
+
+		for (let i = 0; i < lastWorkoutByUser.sets.length; i++) {
+			if (lastWorkoutByUser.sets[i] < lastWorkoutFromProgram.sets[i]) return false;
+		}
+
+		if (lastWorkoutByUser.max < lastWorkoutFromProgram.max) return false;
+
+		return true;
 	};
 
 	const handleDecrease = () => {
