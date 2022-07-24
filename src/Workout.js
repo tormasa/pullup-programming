@@ -45,8 +45,6 @@ function Workout() {
 				setCurrentSet(nextSet);
 				setNextWorkoutDate(nextDate);
 
-				console.log(nextWorkoutDay)
-
 				// New workout
 				let newWorkout = {
 					date: Date.now(),
