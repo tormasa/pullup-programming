@@ -25,8 +25,6 @@ function Workout() {
 			if (maxReps <= program.maxReps && maxReps >= program.minReps) {
 				setCurrenProgram(program);
 
-				console.log('program', program);
-
 				let workouts = JSON.parse(localStorage.getItem("workoutHistory") || "[]");
 				let nextWorkoutDay = 0;
 				let nextSet = 0;
@@ -47,16 +45,16 @@ function Workout() {
 				setCurrentSet(nextSet);
 				setNextWorkoutDate(nextDate);
 
-				console.log(program.days[nextWorkoutDay].sets[nextSet]);
+				console.log(nextWorkoutDay)
 
 				// New workout
 				let newWorkout = {
 					date: Date.now(),
-					type: 'workout',
+					type: (nextWorkoutDay < 6) ? 'workout' : 'max',
 					day: nextWorkoutDay,
 					currentMax: maxReps,
-					sets: program.days[nextWorkoutDay].sets,
-					max: program.days[nextWorkoutDay].max
+					sets: (nextWorkoutDay < 6) ? program.days[nextWorkoutDay].sets : [],
+					max: (nextWorkoutDay < 6) ? program.days[nextWorkoutDay].max : []
 				};
 
 				setCurrentWorkout(newWorkout);
@@ -116,11 +114,13 @@ function Workout() {
 
 	return(
 		<div>
+			<p>{(currentWorkout !== null && currentWorkout.day > 5) ? 'Time to try new MAX!' : ''}</p>
+
 			<p>{(!localStorage.getItem('maxReps') ? 'Set your max reps first!' : '')}</p>
 
 			{(sameDayOrLater(Date.now(), nextWorkoutDate)) ? <h3>You have rested!</h3> : <h3>Next workout on {getDateAndMonth(nextWorkoutDate)}</h3>}
 
-			{(currentProgram === null || currentWorkout === null) ? <div></div> :
+			{(currentProgram === null || currentWorkout === null || currentWorkout.day > 5) ? <div></div> :
 			<div>
 				<h3>{currentProgram.minReps}-{currentProgram.maxReps} reps, day {currentDay + 1}</h3>
 				{(currentSet < 4) ? 
